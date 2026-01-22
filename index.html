@@ -7,8 +7,27 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="user-info">
+        <span id="welcomeMessage"></span>
+        <button id="logoutBtn" class="btn-logout">Logout</button>
+    </div>
     <h1>Welcome to CSP451 Checkpoint 1</h1>
     <p>This is a sample project for learning Git version control.</p>
+    <nav>
+        <a href="about.html" class="nav-link">About Me</a>
+    </nav>
+    <script src="auth.js"></script>
+    <script>
+        // Require authentication to access this page
+        requireAuth();
+        
+        // Display welcome message with username
+        const username = getCurrentUser();
+        document.getElementById('welcomeMessage').textContent = `Welcome, ${username}!`;
+        
+        // Handle logout button
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
