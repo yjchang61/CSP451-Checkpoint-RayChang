@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSP451 Checkpoint 1</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Welcome to CSP451 Checkpoint 1</h1>
+    <p>This is a sample project for learning Git version control.</p>
+    
+    <div class="database-section">
+        <h2>Database Connection Demo</h2>
+        <div class="visitor-form">
+            <input type="text" id="visitor-name" placeholder="Enter your name" />
+            <button onclick="addVisitorFromInput()">Add Visitor</button>
+        </div>
+        <div id="visitors-list"></div>
+    </div>
+    
+    <script src="script.js"></script>
+    <script>
+        function addVisitorFromInput() {
+            const nameInput = document.getElementById('visitor-name');
+            const name = nameInput.value.trim();
+            if (name) {
+                addNewVisitor(name);
+                nameInput.value = '';
+            } else {
+                alert('Please enter a name');
+            }
+        }
+    </script>
+</body>
+</html>
