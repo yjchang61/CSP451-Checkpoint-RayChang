@@ -1,6 +1,13 @@
 // Authentication logic for the application
 
-// Demo user credentials (in a real application, this would be handled server-side)
+// Constants
+const LOGIN_URL = 'login.html';
+const HOME_URL = 'index.html';
+
+// Demo user credentials 
+// WARNING: This is for demonstration purposes only. In a production application,
+// credentials should NEVER be stored client-side. Use server-side authentication
+// with secure password hashing (bcrypt, Argon2) and HTTPS.
 const VALID_USERS = {
     'admin': 'password123',
     'user': 'user123'
@@ -36,21 +43,23 @@ function logout() {
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('username');
     localStorage.removeItem('loginTime');
-    window.location.href = 'login.html';
+    window.location.href = LOGIN_URL;
 }
 
 // Protect page - redirect to login if not authenticated
 function requireAuth() {
     if (!isAuthenticated()) {
-        window.location.href = 'login.html';
+        window.location.href = LOGIN_URL;
+        return false;
     }
+    return true;
 }
 
 // Handle login form submission (only runs on login.html)
 if (document.getElementById('loginForm')) {
     // Check if already logged in
     if (isAuthenticated()) {
-        window.location.href = 'index.html';
+        window.location.href = HOME_URL;
     }
 
     document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -64,7 +73,7 @@ if (document.getElementById('loginForm')) {
         
         if (result.success) {
             console.log('Login successful for user:', username);
-            window.location.href = 'index.html';
+            window.location.href = HOME_URL;
         } else {
             errorMessage.textContent = result.error;
             errorMessage.style.display = 'block';
