@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // API Routes
 
@@ -44,7 +44,7 @@ app.get('/api/contact', (req, res) => {
 app.post('/api/feedback', (req, res) => {
     const { name, message } = req.body;
     
-    if (!name || !message) {
+    if (!name?.trim() || !message?.trim()) {
         return res.status(400).json({
             error: 'Bad Request',
             message: 'Name and message are required fields'
@@ -56,8 +56,8 @@ app.post('/api/feedback', (req, res) => {
         success: true,
         message: 'Feedback received successfully',
         data: {
-            name,
-            message,
+            name: name.trim(),
+            message: message.trim(),
             timestamp: new Date().toISOString()
         }
     });
