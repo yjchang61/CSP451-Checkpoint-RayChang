@@ -4,12 +4,17 @@ const path = require('path');
 // Database file path
 const dbPath = path.join(__dirname, 'database.db');
 
+// Track database connection status
+let isConnected = false;
+
 // Create and connect to the database
 const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
         console.error('Error connecting to database:', err.message);
+        console.error('Application may not function properly without database connection');
     } else {
         console.log('Connected to SQLite database');
+        isConnected = true;
         initializeDatabase();
     }
 });
@@ -33,6 +38,9 @@ function initializeDatabase() {
 
 // Get all visitors
 function getAllVisitors(callback) {
+    if (!isConnected) {
+        return callback(new Error('Database is not connected'), null);
+    }
     db.all('SELECT * FROM visitors ORDER BY visit_time DESC', [], (err, rows) => {
         if (err) {
             callback(err, null);
@@ -44,6 +52,9 @@ function getAllVisitors(callback) {
 
 // Add a new visitor
 function addVisitor(name, callback) {
+    if (!isConnected) {
+        return callback(new Error('Database is not connected'), null);
+    }
     db.run('INSERT INTO visitors (name) VALUES (?)', [name], function(err) {
         if (err) {
             callback(err, null);
@@ -68,5 +79,6 @@ module.exports = {
     db,
     getAllVisitors,
     addVisitor,
-    closeDatabase
+    closeDatabase,
+    getConnectionStatus: () => isConnected
 };

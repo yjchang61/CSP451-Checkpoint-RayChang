@@ -38,9 +38,11 @@ The server will run on `http://localhost:3000` by default.
 - `POST /api/visitors` - Add a new visitor (requires JSON body with `name` field)
 
 ## Project Structure
-- `index.html` - Main HTML page with visitor form
-- `script.js` - Frontend JavaScript with database interaction logic
-- `style.css` - Styling for the web interface
+- `public/` - Static frontend files
+  - `index.html` - Main HTML page with visitor form
+  - `script.js` - Frontend JavaScript with database interaction logic
+  - `style.css` - Styling for the web interface
+  - `about.html` - About page
 - `server.js` - Express server setup
 - `db.js` - Database connection module
 - `package.json` - Node.js dependencies and scripts

@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname)); // Serve static files
+app.use(express.static(path.join(__dirname, 'public'))); // Serve static files from public directory
 
 // API Routes
 
@@ -28,11 +28,21 @@ app.get('/api/visitors', (req, res) => {
 app.post('/api/visitors', (req, res) => {
     const { name } = req.body;
     
-    if (!name) {
-        return res.status(400).json({ error: 'Name is required' });
+    // Validate input
+    if (!name || typeof name !== 'string') {
+        return res.status(400).json({ error: 'Name is required and must be a string' });
     }
     
-    addVisitor(name, (err, visitor) => {
+    // Sanitize and validate length
+    const sanitizedName = name.trim();
+    if (sanitizedName.length === 0) {
+        return res.status(400).json({ error: 'Name cannot be empty' });
+    }
+    if (sanitizedName.length > 100) {
+        return res.status(400).json({ error: 'Name is too long (max 100 characters)' });
+    }
+    
+    addVisitor(sanitizedName, (err, visitor) => {
         if (err) {
             res.status(500).json({ error: 'Failed to add visitor' });
         } else {

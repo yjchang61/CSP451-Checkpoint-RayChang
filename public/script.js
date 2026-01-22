@@ -9,6 +9,9 @@ const API_URL = 'http://localhost:3000/api';
 async function checkDatabaseConnection() {
     try {
         const response = await fetch(`${API_URL}/health`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         console.log('Database Status:', data.message);
         return true;
@@ -22,6 +25,9 @@ async function checkDatabaseConnection() {
 async function fetchVisitors() {
     try {
         const response = await fetch(`${API_URL}/visitors`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const visitors = await response.json();
         console.log('Visitors from database:', visitors);
         displayVisitors(visitors);
@@ -40,11 +46,16 @@ async function addNewVisitor(name) {
             },
             body: JSON.stringify({ name }),
         });
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+        }
         const visitor = await response.json();
         console.log('New visitor added:', visitor);
         fetchVisitors(); // Refresh the list
     } catch (error) {
         console.error('Error adding visitor:', error);
+        alert('Failed to add visitor: ' + error.message);
     }
 }
 
